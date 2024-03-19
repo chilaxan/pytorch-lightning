@@ -327,6 +327,12 @@ async def upload_file(response: Response, filename: str, uploaded_file: UploadFi
     # replace any `:` with `_` as they can allow for path traversal in some cases
     filename = filename.replace(':', '_')
 
+    # replace any `\` with `_`
+    filename = filename.replace('\\', '_')
+
+    # replace any `/` with `_`
+    filename = filename.replace('/', '_')
+
     with TemporaryDirectory() as tmp:
         drive = Drive(
             "lit://uploaded_files",
