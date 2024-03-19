@@ -321,6 +321,12 @@ async def upload_file(response: Response, filename: str, uploaded_file: UploadFi
         response.status_code = status.HTTP_405_METHOD_NOT_ALLOWED
         return {"status": "failure", "reason": "This endpoint is disabled."}
 
+    # Trim any path from filename
+    _, filename = os.path.split(filename)
+
+    # replace any `:` with `_` as they can allow for path traversal in some cases
+    filename = filename.replace(':', '_')
+
     with TemporaryDirectory() as tmp:
         drive = Drive(
             "lit://uploaded_files",
